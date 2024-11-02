@@ -28,14 +28,19 @@ This project is a B2B SaaS application with a simple login screen (credentials: 
    cd backend
    ```
 
-2. Install the dependencies:
+2. Restore the dependencies:
    ```sh
    dotnet restore
    ```
 
-3. Start the backend server:
+3. Build the solution:
    ```sh
-   dotnet run
+   dotnet build B2BSaaSApp.sln
+   ```
+
+4. Start the backend server:
+   ```sh
+   dotnet run --project B2BSaaSApp.csproj
    ```
 
 ## Usage Instructions
