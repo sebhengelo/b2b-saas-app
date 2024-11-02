@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: insightsdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    command: >
+      bash -c "
+        psql -U postgres -d insightsdb -c 'CREATE TABLE IF NOT EXISTS embeddings (id SERIAL PRIMARY KEY, vector FLOAT8[]);'
+      "
+
+  langchain:
+    image: langchain:latest
+    environment:
+      OPENAI_API_KEY: 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
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:
