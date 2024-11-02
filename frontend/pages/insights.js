@@ -16,20 +16,20 @@ const Insights = () => {
     <div>
       <h1>Insights</h1>
       <button onClick={addInsight}>Create</button>
-      <table>
+      <table className="min-w-full bg-white">
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Source</th>
-            <th>Date</th>
+            <th className="py-2">Title</th>
+            <th className="py-2">Source</th>
+            <th className="py-2">Date</th>
           </tr>
         </thead>
         <tbody>
           {insights.map((insight, index) => (
             <tr key={index}>
-              <td>{insight.title}</td>
-              <td>{insight.source}</td>
-              <td>{insight.date}</td>
+              <td className="border px-4 py-2">{insight.title}</td>
+              <td className="border px-4 py-2">{insight.source}</td>
+              <td className="border px-4 py-2">{insight.date}</td>
             </tr>
           ))}
         </tbody>

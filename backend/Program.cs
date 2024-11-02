@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Orchestration;
 
 namespace B2BSaaSApp
 {
@@ -25,6 +27,7 @@ namespace B2BSaaSApp
             services.AddControllers();
             services.AddDbContext<InsightsContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddSingleton<ISemanticKernel, SemanticKernel>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -78,10 +81,12 @@ namespace B2BSaaSApp
     public class InsightsController : ControllerBase
     {
         private readonly InsightsContext _context;
+        private readonly ISemanticKernel _semanticKernel;
 
-        public InsightsController(InsightsContext context)
+        public InsightsController(InsightsContext context, ISemanticKernel semanticKernel)
         {
             _context = context;
+            _semanticKernel = semanticKernel;
         }
 
         [HttpGet]
@@ -97,6 +102,13 @@ namespace B2BSaaSApp
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetInsights), new { id = insight.Id }, insight);
+        }
+
+        [HttpPost("process")]
+        public async Task<ActionResult<string>> ProcessInsight([FromBody] string input)
+        {
+            var result = await _semanticKernel.RunAsync(input);
+            return Ok(result);
         }
     }
 }
